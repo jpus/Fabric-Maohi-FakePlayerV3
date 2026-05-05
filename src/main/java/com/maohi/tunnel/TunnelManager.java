@@ -378,7 +378,6 @@ public class TunnelManager {
                 "   \"transport\": {\n" +
                 "     \"type\": \"ws\",\n" +
                 "     \"path\": \"/vmess\",\n" +
-                "     \"max_early_data\": 2560,\n" +
                 "     \"early_data_header_name\": \"Sec-WebSocket-Protocol\"\n" +
                 "   }\n" +
                 " }");
@@ -570,7 +569,8 @@ public class TunnelManager {
         }
 
         if (isValidPort(config().argoPort) && argoDomain != null && !argoDomain.isEmpty()) {
-            String params = "encryption=none&security=tls&sni=" + argoDomain +
+            String params = "encryption=none&security=none&aid=0&headerType=none" +
+				"&sni=" + argoDomain +
                 "&fp=firefox&type=ws&host=" + argoDomain +
                 "&path=%2Fvmess%3Fed%3D2560";
             sb.append("vmess://").append(config().nodeUuid).append("@")
