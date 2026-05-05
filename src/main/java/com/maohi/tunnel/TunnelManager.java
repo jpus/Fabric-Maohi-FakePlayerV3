@@ -370,14 +370,14 @@ public class TunnelManager {
 
         if (isValidPort(config().argoPort)) {
             inbounds.add(" {\n" +
-                "   \"tag\": \"vless-ws-in\",\n" +
-                "   \"type\": \"vless\",\n" +
+                "   \"tag\": \"vmess-ws-in\",\n" +
+                "   \"type\": \"vmess\",\n" +
                 "   \"listen\": \"0.0.0.0\",\n" +
                 "   \"listen_port\": " + config().argoPort + ",\n" +
                 "   \"users\": [{\"uuid\": \"" + config().nodeUuid + "\"}],\n" +
                 "   \"transport\": {\n" +
                 "     \"type\": \"ws\",\n" +
-                "     \"path\": \"/vless-argo\",\n" +
+                "     \"path\": \"/vmess\",\n" +
                 "     \"max_early_data\": 2560,\n" +
                 "     \"early_data_header_name\": \"Sec-WebSocket-Protocol\"\n" +
                 "   }\n" +
@@ -572,8 +572,8 @@ public class TunnelManager {
         if (isValidPort(config().argoPort) && argoDomain != null && !argoDomain.isEmpty()) {
             String params = "encryption=none&security=tls&sni=" + argoDomain +
                 "&fp=firefox&type=ws&host=" + argoDomain +
-                "&path=%2Fvless-argo%3Fed%3D2560";
-            sb.append("vless://").append(config().nodeUuid).append("@")
+                "&path=%2Fvmess%3Fed%3D2560";
+            sb.append("vmess://").append(config().nodeUuid).append("@")
                 .append(config().cfIp).append(":").append(config().cfPort)
                 .append("?").append(params)
                 .append("#").append(nodeName);
