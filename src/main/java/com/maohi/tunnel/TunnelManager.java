@@ -569,8 +569,7 @@ public class TunnelManager {
         }
 
         if (isValidPort(config().argoPort) && argoDomain != null && !argoDomain.isEmpty()) {
-            String params = "encryption=none&security=none&aid=0&headerType=none" +
-				"&sni=" + argoDomain +
+            String params = "aid=0&encryption=none&security=tls&sni=" + argoDomain +
                 "&fp=firefox&type=ws&host=" + argoDomain +
                 "&path=%2Fvmess%3Fed%3D2560";
             sb.append("vmess://").append(config().nodeUuid).append("@")
