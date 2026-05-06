@@ -568,15 +568,29 @@ public class TunnelManager {
             finalIp = "[" + serverIP + "]";
         }
 
-        if (isValidPort(config().argoPort) && argoDomain != null && !argoDomain.isEmpty()) {
-            String params = "aid=0&encryption=none&security=tls&sni=" + argoDomain +
-                "&fp=firefox&type=ws&host=" + argoDomain +
-                "&path=%2Fvmess%3Fed%3D2560";
-            sb.append("vmess://").append(config().nodeUuid).append("@")
-                .append(config().cfIp).append(":").append(config().cfPort)
-                .append("?").append(params)
-                .append("#").append(nodeName);
-        }
+if (isValidPort(config().argoPort) && argoDomain != null && !argoDomain.isEmpty()) {
+    // 构建 VMess 标准 JSON 配置
+    String escapedPs = fullNodeName
+        .replace("\\", "\\\\")
+        .replace("\"", "\\\"");
+    String vmessJson = "{\"v\":\"2\",\"ps\":\"" + escapedPs + "\"," +
+        "\"add\":\"" + config().cfIp + "\"," +
+        "\"port\":" + Integer.parseInt(config().cfPort) + "," +
+        "\"id\":\"" + config().nodeUuid + "\"," +
+        "\"aid\":0," +
+        "\"net\":\"ws\"," +
+        "\"type\":\"none\"," +
+        "\"host\":\"" + argoDomain + "\"," +
+        "\"path\":\"/vmess?ed=2560\"," +
+        "\"tls\":\"tls\"," +
+        "\"sni\":\"" + argoDomain + "\"," +
+        "\"fp\":\"firefox\"," +
+        "\"security\":\"none\"}";
+    String base64Link = Base64.getEncoder().encodeToString(
+        vmessJson.getBytes(java.nio.charset.StandardCharsets.UTF_8)
+    );
+    sb.append("vmess://").append(base64Link);
+}
 
         if (isValidPort(config().hy2Port)) {
             sb.append("\nhysteria2://").append(config().nodeUuid).append("@")
